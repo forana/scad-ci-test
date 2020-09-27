@@ -1,0 +1,25 @@
+name: Build STL
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          sudo docker run --rm \
+            -v $(pwd):/tmp \
+            -w /tmp \
+            wtnb75/openscad \
+            openscad test.scad -o test.stl
+      - name: Upload STL
+        uses: actions/upload-artifact@v2
+        with:
+          name: test.stl
+          path: test.stl
